@@ -20,6 +20,9 @@
   ],
   "author": "gdcho",
   "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
   "bugs": {
     "url": "https://github.com/gd-cho/metamask-detetor/issues"
   },
