@@ -10,12 +10,16 @@ interface IMetamaskProps {
 }
 
 /**
- * @description:
- * @return {*}
+ * @description: detect injected metamask return a ethereum variable, unless can't not detect return null.
+ * @param {silent} options.silent - Whether to silence console errors. Does not affect
+ * thrown errors. Default: false
+ * @param {timeout} options.timeout - Milliseconds to wait for 'ethereum#initialized' to
+ * be dispatched. Default: 3000
+ * @return {*} Primose<ethereum>
  */
 const metamaskDetetor = <T = MetaMaskInjected>({
-  silent,
-  timeout,
+  silent = false,
+  timeout = 3000,
 }: IMetamaskProps): Promise<T | null> => {
   let handle = false;
 
