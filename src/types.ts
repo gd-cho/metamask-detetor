@@ -53,7 +53,7 @@ export const REQUEST_METHOD = [
   'eth_sendTransaction',
 ] as const;
 
-export interface requestObject {
+export interface RequestObject {
   method: ValueOf<typeof REQUEST_METHOD>;
   params?: (
     | string
@@ -69,7 +69,7 @@ export interface MetaMaskInjected {
   eventNames: typeof EVENT_NAMES;
   isMetaMask: boolean;
   isConnected: () => boolean;
-  request: (obj: requestObject) => any;
+  request: (obj: RequestObject) => any;
   once(
     eventName: ValueOf<typeof EVENT_NAMES>,
     listener: (...args: any[]) => void

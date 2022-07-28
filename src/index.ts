@@ -1,4 +1,4 @@
-import { MetaMaskInjected, Window } from './types';
+import { MetaMaskInjected, Window, AddEthereumChainParameter } from './types';
 
 interface IMetamaskProps {
   silent?: boolean;
@@ -51,7 +51,10 @@ const metamaskDetetor = <T = MetaMaskInjected>({
       window.removeEventListener('metamask_initialized', handleEthereum);
 
       const { ethereum } = window as unknown as Window;
-
+      ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [],
+      });
       if (ethereum && ethereum.isMetaMask) {
         resolve(ethereum as unknown as T);
       } else {
