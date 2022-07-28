@@ -1,29 +1,45 @@
-import { MetaMaskInjected } from './types';
-
-interface Window {
-  ethereum: MetaMaskInjected;
-}
+import { MetaMaskInjected, Window } from './types';
 
 interface IMetamaskProps {
-  silent: boolean;
-  timeout: number;
+  silent?: boolean;
+  timeout?: number;
+  error?: {
+    type: 'console' | 'alert';
+    message: string;
+  };
 }
 
 /**
- * @description: detect injected metamask return a ethereum variable, unless can't not detect return null.
+ * @description: detect injected metamask return a ethereum variable, unless can't not detect print error message.
  * @param {silent} options.silent - Whether to silence console errors. Does not affect
  * thrown errors. Default: false
  * @param {timeout} options.timeout - Milliseconds to wait for 'ethereum#initialized' to
  * be dispatched. Default: 3000
+ * @param {timeout} options.error - If the connection is wrong, error.type like `console` or `alert` `error.message`.
  * @return {*} Primose<ethereum>
  */
 const metamaskDetetor = <T = MetaMaskInjected>({
   silent = false,
   timeout = 3000,
-}: IMetamaskProps): Promise<T | null> => {
+  error = {
+    type: 'console',
+    message: 'Connect MetaMask Faild! Please Checkout You NetWork',
+  },
+}: IMetamaskProps): Promise<T> => {
+  if (typeof silent !== 'boolean') {
+    throw new Error(
+      `metamask-detector: Expected option 'silent' to be a boolean.`
+    );
+  }
+  if (typeof timeout !== 'number') {
+    throw new Error(
+      `metamask-detector: Expected option 'timeout' to be a number.`
+    );
+  }
+
   let handle = false;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const { ethereum } = window as unknown as Window;
 
     const handleEthereum = () => {
@@ -39,13 +55,13 @@ const metamaskDetetor = <T = MetaMaskInjected>({
       if (ethereum && ethereum.isMetaMask) {
         resolve(ethereum as unknown as T);
       } else {
-        const message =
-          ethereum && !ethereum.isMetaMask
-            ? 'Non-MetaMask Detect.'
-            : 'Not Detect Ethereum.';
-
-        !silent && console.error(`metamask-detector: ${message}`);
-        resolve(null);
+        if (error.type === 'alert') {
+          alert(`metamask-detector: ${error.message}`);
+        } else {
+          !silent
+            ? console.error(`metamask-detector: ${error.message}`)
+            : console.log(`metamask-detector: ${error.message}`);
+        }
       }
     };
 

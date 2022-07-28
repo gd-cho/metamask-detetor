@@ -1,3 +1,7 @@
+export interface Window {
+  ethereum: MetaMaskInjected;
+}
+
 export const EVENT_NAMES = [
   'connect',
   'message',
@@ -10,7 +14,7 @@ export const EVENT_NAMES = [
 
 type ValueOf<T> = T[keyof T];
 
-interface AddEthereumChainParameter {
+export interface AddEthereumChainParameter {
   chainId: string;
   blockExplorerUrls?: string[];
   chainName?: string;
@@ -23,13 +27,14 @@ interface AddEthereumChainParameter {
   rpcUrls?: string[];
 }
 
-interface SwitchEthereumChainParameter {
+export interface SwitchEthereumChainParameter {
   chainId: string;
 }
 
-const REQUEST_METHOD = [
+export const REQUEST_METHOD = [
   'wallet_addEthereumChain',
   'wallet_switchEthereumChain',
+  'eth_requestAccounts',
   'eth_chainId',
   'eth_accounts',
   'eth_blockNumber',
@@ -48,7 +53,7 @@ const REQUEST_METHOD = [
   'eth_sendTransaction',
 ] as const;
 
-interface requestObject {
+export interface requestObject {
   method: ValueOf<typeof REQUEST_METHOD>;
   params?: (
     | string
